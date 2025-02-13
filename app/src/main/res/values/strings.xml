@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">WorkTimeManager</string>
+    <string name="selected_date">Selected Date:</string>
 </resources>
