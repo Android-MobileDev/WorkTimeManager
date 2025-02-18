@@ -13,6 +13,7 @@ class WorkTimeAdapter(private val workTimeList: List<WorkTime>) :
                 val dateText: TextView = view.findViewById(R.id.dateText)
                 val startTimeText: TextView = view.findViewById(R.id.startTimeText)
                 val endTimeText: TextView = view.findViewById(R.id.endTimeText)
+                val totalTimeText: TextView = view.findViewById(R.id.totalTimeText)
             }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorkTimeViewHolder {
@@ -26,6 +27,7 @@ class WorkTimeAdapter(private val workTimeList: List<WorkTime>) :
         holder.dateText.text = "Date: ${workTime.date}"
         holder.startTimeText.text = "Start: ${workTime.startTime}"
         holder.endTimeText.text = "End: ${workTime.endTime}"
+        holder.totalTimeText.text = "Total: ${workTime.getTotalHours()} hrs"
     }
 
     override fun getItemCount() = workTimeList.size

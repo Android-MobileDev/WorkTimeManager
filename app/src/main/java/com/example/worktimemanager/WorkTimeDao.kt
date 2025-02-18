@@ -2,16 +2,17 @@ package com.example.worktimemanager
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
 interface WorkTimeDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWorkTime(workTime: WorkTime)
 
-    @Query("SELECT * FROM work_time_table WHERE date = :date")
-    suspend fun getWorkTimeByDate(date: String): WorkTime?
-
-    @Query("SELECT * FROM work_time_table")
+    @Query("SELECT * FROM work_time_table ORDER BY date DESC")
     suspend fun getAllWorkTimes(): List<WorkTime>
+
+    @Query("SELECT * FROM work_time_table WHERE date BETWEEN :startDate AND :endDate")
+    suspend fun getWorkTimesInRange(startDate: String, endDate: String): List<WorkTime>
 }
