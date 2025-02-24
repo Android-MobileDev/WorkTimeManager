@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.WorkTimeManager" parent="Theme.Material3.Light">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorTertiary">@color/tertiary</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:textColor">@color/colorOnSurface</item>
+    </style>
 
-    <style name="Theme.WorkTimeManager" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.WorkTimeManager.Dark" parent="Theme.Material3.Dark">
+        <item name="colorPrimary">@color/primaryDark</item>
+        <item name="colorSecondary">@color/secondaryDark</item>
+        <item name="colorTertiary">@color/tertiaryDark</item>
+        <item name="android:windowBackground">@color/backgroundDark</item>
+        <item name="android:textColor">@color/colorOnSurfaceDark</item>
+    </style>
 </resources>
