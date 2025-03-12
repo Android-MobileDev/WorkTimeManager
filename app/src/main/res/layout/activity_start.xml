@@ -6,26 +6,31 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <androidx.appcompat.widget.SwitchCompat
+    <Switch
         android:id="@+id/themeSwitch"
-        android:layout_width="100dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dark_mode"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <TextView
         android:id="@+id/welcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to Work Time Manager"
+        android:paddingTop="16dp"
+        android:text="@string/welcome_to_work_time_manager"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="24sp"
-        android:textColor="?attr/colorOnSurface"/>
+        android:textStyle="bold" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/startButton"
-        style="@style/Widget.Material3.Button"
-        android:layout_width="match_parent"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:text="Start App"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="@string/start_app"
         android:textSize="18sp" />
 
 </LinearLayout>

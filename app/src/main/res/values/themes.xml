@@ -9,7 +9,7 @@
     </style>
 
     <style name="Theme.WorkTimeManager.Dark" parent="Theme.Material3.Dark">
-        <item name="colorPrimary">@color/primaryDark</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorSecondary">@color/secondaryDark</item>
         <item name="colorTertiary">@color/tertiaryDark</item>
         <item name="android:windowBackground">@color/backgroundDark</item>

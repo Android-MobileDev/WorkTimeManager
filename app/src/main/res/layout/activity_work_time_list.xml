@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Saved Work Times"
+        android:text="@string/saved_work_times"
         android:textSize="20sp"
         android:textStyle="bold"
         android:paddingBottom="8dp"/>
@@ -18,7 +18,7 @@
         android:id="@+id/totalWeeklyTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Total Last Week: "
+        android:text="@string/total_last_week"
         android:textSize="16sp"
         android:textStyle="bold"/>
 
@@ -26,19 +26,22 @@
         android:id="@+id/totalMonthlyTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Total Last Month: "
+        android:text="@string/total_last_month"
         android:textSize="16sp"
         android:textStyle="bold"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/workTimeRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <Button
         android:id="@+id/backButton"
-        android:layout_width="match_parent"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:text="Back"
-        android:layout_marginTop="8dp"/>
+        android:layout_gravity="center"
+        android:text="@string/back"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/colorPrimary"/>
 </LinearLayout>
