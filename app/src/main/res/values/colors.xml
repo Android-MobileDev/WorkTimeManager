@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#88EF8E</color>
+    <color name="primary">#95F699</color>
     <color name="secondary">#4D884E</color>
     <color name="tertiary">#F591AB</color>
-    <color name="background">#FFFFFF</color>
+    <color name="background">#EFEFEF</color>
     <color name="colorOnSurface">#000000</color>
+    <color name="colorPrimary">#466647</color>
 
     <color name="primaryDark">#5BEE61</color>
     <color name="secondaryDark">#207A24</color>
     <color name="tertiaryDark">#B73B64</color>
     <color name="backgroundDark">#121212</color>
     <color name="colorOnSurfaceDark">#FFFFFF</color>
+    <color name="colorAccentDark">#5BEE61</color>
+    <color name="colorPrimaryDark">#5BEE61</color>
 </resources>

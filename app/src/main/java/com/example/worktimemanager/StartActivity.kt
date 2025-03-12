@@ -1,86 +1,50 @@
 package com.example.worktimemanager
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
+import android.widget.Button
+import android.widget.Switch
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.platform.LocalContext
-import android.content.Context
-import android.content.Intent
-import androidx.compose.foundation.background
-import com.example.worktimemanager.ui.theme.WorkTimeManagerTheme
+import androidx.core.content.edit
 
-class StartActivity : ComponentActivity() {
+class StartActivity : AppCompatActivity() {
+    @SuppressLint("UseKtx", "UseSwitchCompatOrMaterialCode")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_start)  // ✅ Use XML layout
 
-        setContent {
-            val sharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
-            val isDarkMode = remember { mutableStateOf(sharedPreferences.getBoolean("dark_mode", false)) }
+        // SharedPreferences for saving theme state
+        val sharedPreferences: SharedPreferences = getSharedPreferences("AppPreferences", MODE_PRIVATE)
+        val themeSwitch: Switch = findViewById(R.id.themeSwitch)
+        val startButton: Button = findViewById(R.id.startButton)
 
-            WorkTimeManagerTheme(darkTheme = isDarkMode.value) {
-                StartScreen(
-                    darkTheme = isDarkMode.value,
-                    onThemeToggle = { isChecked ->
-                        isDarkMode.value = isChecked  // ✅ Update state to trigger recomposition
-                        sharedPreferences.edit().putBoolean("dark_mode", isChecked).apply()
-                        AppCompatDelegate.setDefaultNightMode(
-                            if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
-                            else AppCompatDelegate.MODE_NIGHT_NO
-                        )
-                    }
-                )
-            }
-        }
-    }
-}
+        // Load saved theme preference
+        val isDarkMode = sharedPreferences.getBoolean("dark_mode", false)
+        themeSwitch.isChecked = isDarkMode
 
-@Composable
-fun StartScreen(darkTheme: Boolean, onThemeToggle: (Boolean) -> Unit) {
-    val context = LocalContext.current  // ✅ Now it's inside a @Composable function
-    val backgroundColor = MaterialTheme.colorScheme.background
-    val textColor = MaterialTheme.colorScheme.onBackground
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundColor) // ✅ Ensures background follows theme
-            .padding(16.dp)
-    ) {
-        Switch(
-            checked = darkTheme,
-            onCheckedChange = { onThemeToggle(it) }
+        // Apply the theme
+        AppCompatDelegate.setDefaultNightMode(
+            if (isDarkMode) AppCompatDelegate.MODE_NIGHT_YES
+            else AppCompatDelegate.MODE_NIGHT_NO
         )
 
-        Text(
-            text = "Welcome to Work Time Manager",
-            style = MaterialTheme.typography.headlineMedium,
-            color = textColor
-        )
-
-        Button(
-            onClick = {
-                val intent = Intent(context, MainActivity::class.java)
-                context.startActivity(intent)  // ✅ Start MainActivity correctly!
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Start App")
+        // Toggle dark mode
+        themeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            sharedPreferences.edit().putBoolean("dark_mode", isChecked).apply()
+            AppCompatDelegate.setDefaultNightMode(
+                if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
+                else AppCompatDelegate.MODE_NIGHT_NO
+            )
+            recreate()  // 🔄 Restart activity to apply theme immediately
         }
-    }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewStartScreen() {
-    WorkTimeManagerTheme {
-        StartScreen(darkTheme = false) { }
+        // Start MainActivity when button is clicked
+        startButton.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

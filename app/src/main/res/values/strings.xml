@@ -1,4 +1,21 @@
 <resources>
     <string name="app_name">WorkTimeManager</string>
     <string name="selected_date">Selected Date:</string>
+    <string name="start_app">Start App</string>
+    <string name="start_time">Start Time: —:—</string>
+    <string name="select_start_time">Select Start Time</string>
+    <string name="end_time">End Time: —:—</string>
+    <string name="save">Save</string>
+    <string name="view_saved_times">View Saved Times</string>
+    <string name="welcome_to_work_time_manager">Welcome to Work Time Manager</string>
+    <string name="saved_work_times">Saved Work Times</string>
+    <string name="total_last_week">Total Last Week:</string>
+    <string name="total_last_month">Total Last Month:</string>
+    <string name="back">Back</string>
+    <string name="date">Date:</string>
+    <string name="start">Start:</string>
+    <string name="end">End:</string>
+    <string name="total">Total:</string>
+    <string name="select_end_time">Select End Time</string>
+    <string name="dark_mode">Dark Mode</string>
 </resources>
