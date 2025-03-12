@@ -10,7 +10,7 @@ interface WorkTimeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWorkTime(workTime: WorkTime)
 
-    @Query("SELECT * FROM work_time_table ORDER BY date DESC")
+    @Query("SELECT * FROM work_time_table ORDER BY date ASC")
     suspend fun getAllWorkTimes(): List<WorkTime>
 
     @Query("SELECT * FROM work_time_table WHERE date BETWEEN :startDate AND :endDate")
