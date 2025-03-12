@@ -49,7 +49,6 @@ class WorkTimeList : ComponentActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.workTimeRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         val totalWeeklyTextView = findViewById<TextView>(R.id.totalWeeklyTextView)
-        val totalMonthlyTextView = findViewById<TextView>(R.id.totalMonthlyTextView)
 
         database = WorkTimeDatabase.getDatabase(this)
         workTimeDao = database.workTimeDao()
@@ -57,28 +56,21 @@ class WorkTimeList : ComponentActivity() {
         lifecycleScope.launch {
             val workTimes = workTimeDao.getAllWorkTimes()
 
-            println("All work times in the database:")
-            workTimes.forEach { workTime ->
-                println("WorkTime - ID: ${workTime.id}, Date: ${workTime.date}")
+            val sortedWorkTimes = workTimes.sortedByDescending { workTime ->
+                SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).parse(workTime.date)
             }
 
+            workTimeAdapter = WorkTimeAdapter(sortedWorkTimes)
+
             val lastWeekWorkTimes = getWorkTimesForLastWeek()
-            //val lastMonthWorkTimes = getWorkTimesForLastMonth()
-
-            // Debugging output
-            println("Last week's work times: $lastWeekWorkTimes")
-            //println("Last month's work times: $lastMonthWorkTimes")
-
             val totalWeekly = calculateTotalHours(lastWeekWorkTimes)
-            //val totalMonthly = calculateTotalHours(lastMonthWorkTimes)
-            workTimeAdapter = WorkTimeAdapter(workTimes)
 
             runOnUiThread {
                 recyclerView.adapter = workTimeAdapter
                 totalWeeklyTextView.text = "Total Last Week: $totalWeekly hrs"
-                //totalMonthlyTextView.text = "Total Last Month: $totalMonthly hrs"
             }
         }
+
 
         val backButton = findViewById<Button>(R.id.backButton)
         backButton.setOnClickListener {
@@ -115,12 +107,14 @@ class WorkTimeList : ComponentActivity() {
         calendar.add(Calendar.DAY_OF_YEAR, 6)
         val endOfLastWeek = calendar.time
 
-        val startDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(startOfLastWeek)
-        val endDate = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(endOfLastWeek)
+        println("Fetching work times for last week from ${startOfLastWeek} to ${endOfLastWeek}")
 
-        println("Fetching work times for last week from $startDate to $endDate")
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
-        return workTimeDao.getWorkTimesInRange(startDate, endDate)
+        return workTimeDao.getAllWorkTimes().filter { workTime ->
+            val workDate = dateFormat.parse(workTime.date) ?: return@filter false
+            workDate in startOfLastWeek..endOfLastWeek
+        }
     }
 
     /*private suspend fun getWorkTimesForLastMonth(): List<WorkTime> {
