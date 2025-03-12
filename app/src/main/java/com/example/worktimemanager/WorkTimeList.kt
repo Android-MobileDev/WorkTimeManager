@@ -49,6 +49,7 @@ class WorkTimeList : ComponentActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.workTimeRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         val totalWeeklyTextView = findViewById<TextView>(R.id.totalWeeklyTextView)
+        val totalMonthlyTextView = findViewById<TextView>(R.id.totalMonthlyTextView)
 
         database = WorkTimeDatabase.getDatabase(this)
         workTimeDao = database.workTimeDao()
@@ -65,9 +66,13 @@ class WorkTimeList : ComponentActivity() {
             val lastWeekWorkTimes = getWorkTimesForLastWeek()
             val totalWeekly = calculateTotalHours(lastWeekWorkTimes)
 
+            val lastMonthWorkTimes = getWorkTimesForLastMonth()
+            val totalMonthly = calculateTotalHours(lastMonthWorkTimes)
+
             runOnUiThread {
                 recyclerView.adapter = workTimeAdapter
                 totalWeeklyTextView.text = "Total Last Week: $totalWeekly hrs"
+                totalMonthlyTextView.text = "Total Last Month: $totalMonthly hrs"
             }
         }
 
@@ -77,10 +82,11 @@ class WorkTimeList : ComponentActivity() {
             finish()
         }
     }
+
     private fun calculateTotalHours(workTimes: List<WorkTime>): String {
         var totalMinutes = 0
         for (workTime in workTimes) {
-            val totalTimeString = workTime.getTotalHours()
+            val totalTimeString = workTime.getTotalHours().trim()
 
             println("Time worked for ${workTime.date}: $totalTimeString")
 
@@ -117,41 +123,31 @@ class WorkTimeList : ComponentActivity() {
         }
     }
 
-    /*private suspend fun getWorkTimesForLastMonth(): List<WorkTime> {
+    private suspend fun getWorkTimesForLastMonth(): List<WorkTime> {
         val calendar = Calendar.getInstance()
 
-        // Set start of last month to the 1st
+        // Move to the first day of the previous month
         calendar.set(Calendar.DAY_OF_MONTH, 1)
         calendar.add(Calendar.MONTH, -1)
         val startOfMonth = calendar.time
 
-        // Set end of last month to the last day, at 23:59:59
+        // Move to the last day of the previous month
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
         val endOfMonth = calendar.time
 
-        // Use SimpleDateFormat for dd/MM/yyyy, ensure it's in the correct timezone (local time)
-        val dbDateFormat = SimpleDateFormat("d/M/yyyy", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
-        val startDate = dbDateFormat.format(startOfMonth)
-        val endDate = dbDateFormat.format(endOfMonth)
+        println(
+            "Fetching work times for last month from ${dateFormat.format(startOfMonth)} to ${
+                dateFormat.format(
+                    endOfMonth
+                )
+            }"
+        )
 
-        // Debug: Log the range to ensure we’re using the right start and end dates
-        println("Start Date for last month query: $startDate")
-        println("End Date for last month query: $endDate")
-
-        // Fetch work times in the given range
-        val workTimes = workTimeDao.getWorkTimesInRange(startDate, endDate)
-
-        // Debug: Check the results from the database
-        if (workTimes.isEmpty()) {
-            println("No work times found for the given range: $startDate to $endDate")
-        } else {
-            println("Work times returned:")
-            workTimes.forEach { workTime ->
-                println("Work time found: ${workTime.date} (ID: ${workTime.id})")
-            }
+        return workTimeDao.getAllWorkTimes().filter { workTime ->
+            val workDate = dateFormat.parse(workTime.date) ?: return@filter false
+            workDate in startOfMonth..endOfMonth
         }
-
-        return workTimes
-    }*/
+    }
 }

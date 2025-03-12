@@ -64,6 +64,7 @@ class WorkTimeAdapter(private val workTimeList: List<WorkTime>) :
 
         val groupedList = mutableListOf<Any>()
         var currentMonth: String? = null
+        var totalMonthlyMinutes = 0
 
         workTimes.sortedByDescending {
             dateFormat.parse(it.date)
@@ -71,11 +72,36 @@ class WorkTimeAdapter(private val workTimeList: List<WorkTime>) :
             val workDate = dateFormat.parse(workTime.date) ?: return@forEach
             val month = monthFormat.format(workDate)
 
+            // If new month detected, add a header and reset the counter
             if (month != currentMonth) {
-                groupedList.add(month) // Add month header
+                // Convert minutes to HH:mm
+                if (currentMonth != null) {
+                    val hours = totalMonthlyMinutes / 60
+                    val minutes = totalMonthlyMinutes % 60
+                    groupedList.add("Total: ${String.format("%02d:%02d", hours, minutes)} hrs")
+                }
+
+                groupedList.add(month) // Add new month header
                 currentMonth = month
+                totalMonthlyMinutes = 0
             }
+
+            // Calculate total minutes for this month
+            val timeParts = workTime.getTotalHours().split(":")
+            if (timeParts.size == 2) {
+                val hours = timeParts[0].toInt()
+                val minutes = timeParts[1].toInt()
+                totalMonthlyMinutes += (hours * 60) + minutes
+            }
+
             groupedList.add(workTime)
+        }
+
+        // Add the last month's total hours
+        if (currentMonth != null) {
+            val hours = totalMonthlyMinutes / 60
+            val minutes = totalMonthlyMinutes % 60
+            groupedList.add("Total: ${String.format("%02d:%02d", hours, minutes)} hrs")
         }
 
         return groupedList
